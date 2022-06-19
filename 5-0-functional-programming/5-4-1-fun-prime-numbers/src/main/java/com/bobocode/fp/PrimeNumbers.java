@@ -5,6 +5,7 @@ import com.bobocode.util.ExerciseNotCompletedException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntConsumer;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -12,15 +13,30 @@ import java.util.stream.IntStream;
  * {@link java.util.stream.IntStream} of prime numbers. That stream is used in all public methods on this class.
  * <p>
  * See {@link OOSumOfPrimes} for a reference
- * TODO: implement each method according to the javadoc and verify it by running {@link PrimeNumbersTest}
- * <p>
- * TODO: if you find this exercise valuable and you want to get more like it, <a href="https://www.patreon.com/bobocode">
- *     please support us on Patreon</a>
- *
  * @author Taras Boychuk
  */
 public class PrimeNumbers {
     private PrimeNumbers() {
+    }
+
+    public static boolean isPrime(int number) {
+        if (number == 2) {
+            return true;
+        }
+
+        if (number % 2 == 0) {
+            return false;
+        }
+
+        int maxDivisor = (int) Math.sqrt(number);
+        for (int counter = 3; counter <= maxDivisor; counter += 2) {
+            if (number % counter == 0) {
+                return false;
+            }
+        }
+
+        return true;
+
     }
 
     /**
@@ -30,7 +46,8 @@ public class PrimeNumbers {
      * @return an infinite int stream of prime numbers
      */
     public static IntStream stream() {
-        throw new ExerciseNotCompletedException(); // todo: create an infinite stream of ints, then filter prime numbs
+        IntStream stream = IntStream.range(2, Integer.MAX_VALUE);
+        return stream.filter(i -> isPrime(i));
     }
 
     /**
@@ -40,7 +57,7 @@ public class PrimeNumbers {
      * @return an int stream of prime numbers with a specified size
      */
     public static IntStream stream(int size) {
-        throw new ExerciseNotCompletedException(); // todo: use the prev to generate a stream method but limit its size
+        return stream().limit(size);
     }
 
     /**
@@ -51,8 +68,7 @@ public class PrimeNumbers {
      * @return the sum of n prime numbers
      */
     public static int sum(int n) {
-        throw new ExerciseNotCompletedException(); // todo: use prev method and calculate the sum
-
+        return stream().limit(n).sum();
     }
 
     /**
@@ -61,7 +77,7 @@ public class PrimeNumbers {
      * @return a list of collected prime numbers
      */
     public static List<Integer> list(int n) {
-        throw new ExerciseNotCompletedException(); // todo: collect prime numbers into the list
+        return stream().limit(n).boxed().collect(Collectors.toList());
     }
 
     /**
@@ -71,7 +87,7 @@ public class PrimeNumbers {
      * @param consumer a logic that should be applied to the found prime number
      */
     public static void processByIndex(int idx, IntConsumer consumer) {
-        throw new ExerciseNotCompletedException(); // todo: find an element in the stream by index and process it
+        consumer.accept(list(idx+1).get(idx));
     }
 
     /**
@@ -85,6 +101,6 @@ public class PrimeNumbers {
      * @return a map with prime number grouped by the amount of digits
      */
     public static Map<Integer, List<Integer>> groupByAmountOfDigits(int n) {
-        throw new ExerciseNotCompletedException(); // todo: group n prime numbers by the amount of digits
+        return stream(n).boxed().collect(Collectors.groupingBy(i -> i.toString().length(), Collectors.toList()));
     }
 }
