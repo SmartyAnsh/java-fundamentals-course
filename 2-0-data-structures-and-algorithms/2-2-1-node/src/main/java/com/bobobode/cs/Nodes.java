@@ -1,6 +1,8 @@
 package com.bobobode.cs;
 
-import com.bobocode.util.ExerciseNotCompletedException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A class that consists of static methods only and provides util methods for {@link Node}.
@@ -19,7 +21,9 @@ public class Nodes {
      * @return a new instance of {@link Node}
      */
     public static <T> Node<T> create(T element) {
-        throw new ExerciseNotCompletedException(); // todo:
+        Node<T> node = new Node<T>();
+        node.setElement(element);
+        return node;
     }
 
     /**
@@ -30,7 +34,7 @@ public class Nodes {
      * @param <T>    a genetic type
      */
     public static <T> void link(Node<T> first, Node<T> second) {
-        throw new ExerciseNotCompletedException(); // todo:
+        first.setNextNode(second);
     }
 
     /**
@@ -43,7 +47,10 @@ public class Nodes {
      * @return a reference to a first node created based on firstElement
      */
     public static <T> Node<T> pairOf(T firstElement, T secondElement) {
-        throw new ExerciseNotCompletedException(); // todo:
+        Node<T> firstNode = create(firstElement);
+        Node<T> secondNode = create(secondElement);
+        link(firstNode, secondNode);
+        return firstNode;
     }
 
     /**
@@ -57,7 +64,11 @@ public class Nodes {
      * @return a reference to the first node
      */
     public static <T> Node<T> closedPairOf(T firstElement, T secondElement) {
-        throw new ExerciseNotCompletedException(); // todo:
+        Node<T> firstNode = create(firstElement);
+        Node<T> secondNode = create(secondElement);
+        link(firstNode, secondNode);
+        link(secondNode, firstNode);
+        return firstNode;
     }
 
     /**
@@ -69,7 +80,22 @@ public class Nodes {
      * @return a reference to the first element of the chain
      */
     public static <T> Node<T> chainOf(T... elements) {
-        throw new ExerciseNotCompletedException(); // todo:
+        List<Node<T>> nodes = new ArrayList<>();
+        int[] count = new int[1];
+        count[0] = 0;
+        Arrays.stream(elements).forEach(i -> {
+            Node<T> node = create(i);
+            if (count[0] >= 1) {
+                nodes.get(count[0] - 1).setNextNode(node);
+            }
+            count[0] = ++count[0];
+            nodes.add(node);
+        });
+        if (nodes.size() > 0) {
+            return nodes.get(0);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -82,6 +108,24 @@ public class Nodes {
      * @return a reference to the first element of the chain
      */
     public static <T> Node<T> circleOf(T... elements) {
-        throw new ExerciseNotCompletedException(); // todo:
+        List<Node<T>> nodes = new ArrayList<>();
+        int[] count = new int[1];
+        count[0] = 0;
+        Arrays.stream(elements).forEach(i -> {
+            Node<T> node = create(i);
+            if (count[0] > 0) {
+                nodes.get(count[0] - 1).setNextNode(node);
+            }
+            count[0] = ++count[0];
+            nodes.add(node);
+            if (nodes.size() == elements.length) {
+                nodes.get(elements.length - 1).setNextNode(nodes.get(0));
+            }
+        });
+        if (nodes.size() > 0) {
+            return nodes.get(0);
+        } else {
+            return null;
+        }
     }
 }
