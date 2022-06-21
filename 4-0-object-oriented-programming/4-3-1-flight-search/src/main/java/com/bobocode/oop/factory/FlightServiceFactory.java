@@ -6,7 +6,7 @@ import com.bobocode.util.ExerciseNotCompletedException;
 /**
  * {@link FlightServiceFactory} is used to create an instance of {@link FlightService}
  * <p>
- * todo: 1. Implement method {@link FlightServiceFactory#creteFlightService()}
+ * todo: 1. Implement method {@link FlightServiceFactory#createFlightService()}
  */
 public class FlightServiceFactory {
 
@@ -15,7 +15,7 @@ public class FlightServiceFactory {
      *
      * @return FlightService
      */
-    public FlightService creteFlightService() {
-        throw new ExerciseNotCompletedException();
+    public FlightService createFlightService() {
+        return new FlightService();
     }
 }
